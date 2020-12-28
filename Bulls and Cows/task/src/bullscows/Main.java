@@ -4,49 +4,49 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-    private static int BULL = 0;
-    private static int COW = 0;
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Please, enter the secret code's length: ");
         String number = generateNumber(scanner.nextInt());
-        System.out.println("The random secret number is " + number);
-//        String userGuess;
-//        do {
-//            userGuess = scanner.next();
-//        } while (!isCorrectInput(userGuess));
-//
-//        compare(number, userGuess);
-//
-//        if (BULL == 0 && COW == 0) {
-//            System.out.println("Grade: None");
-//        } else {
-//            System.out.format("Grade: %d bull(s) and %d cow(s)\n", BULL, COW);
-//        }
-//        System.out.println("The secret code is " + number);
-    }
+        System.out.println("Okay, let's start a game!");
 
-    private static void compare(String number, String userGuess) {
-        for (int i = 0; i < number.length(); i++) {
-            for (int j = 0; j < userGuess.length(); j++) {
-                if (number.charAt(i) == userGuess.charAt(j)) {
-                    if (i == j) {
-                        BULL++;
-                    } else {
-                        COW++;
+        int turn = 1;
+        while (true) {
+            int bull = 0;
+            int cow = 0;
+
+            System.out.println("Turn " + turn);
+            String userGuess = scanner.next();
+
+            for (int i = 0; i < number.length(); i++) {
+                for (int j = 0; j < userGuess.length(); j++) {
+                    if (number.charAt(i) == userGuess.charAt(j)) {
+                        if (i == j) {
+                            bull++;
+                        } else {
+                            cow++;
+                        }
                     }
                 }
             }
-        }
-    }
 
-    private static boolean isCorrectInput(String num) {
-        return Integer.parseInt(num) >= 1000 && Integer.parseInt(num) <= 9999;
+            if (number.equals(userGuess)) {
+                System.out.format("Grade: %d bull(s) and %d cow(s)\n", bull, cow);
+                System.out.println("Congratulations! You guessed the secret code.");
+                break;
+            } else if (bull == 0 && cow == 0) {
+                System.out.println("Grade: None");
+            } else {
+                System.out.format("Grade: %d bull(s) and %d cow(s)\n", bull, cow);
+            }
+
+            turn++;
+        }
     }
 
     private static String generateNumber(int length) {
         if (length > 10) {
-            System.out.println("Error: can't generate a secret number with a length of 11 because there aren't enough unique digits.");
+            System.out.format("Error: can't generate a secret number with a length of %d because there aren't enough unique digits.", length);
             return "";
         } else {
             StringBuilder builder = new StringBuilder();

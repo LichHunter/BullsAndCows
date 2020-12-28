@@ -12,30 +12,24 @@ import java.util.stream.Collectors;
 
 public class BullsCowsTest extends StageTest<String> {
 
-    String secretNumber;
+	@Override
+	public List<TestCase<String>> generate() {
+		return Arrays.asList(
+				new TestCase<String>().setDynamicTesting(this::test1),
+				new TestCase<String>().setDynamicTesting(this::test2),
+				new TestCase<String>().setDynamicTesting(this::test3));
+	}
 
-    private static List<Integer> stringToArrayOfNumbers(String array) {
-        return Arrays.stream(array.split(""))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
-    }
+	String secretNumber;
 
-    @Override
-    public List<TestCase<String>> generate() {
-        return Arrays.asList(
-                new TestCase<String>().setDynamicTesting(this::test1),
-                new TestCase<String>().setDynamicTesting(this::test2),
-                new TestCase<String>().setDynamicTesting(this::test3));
-    }
-
-    // base test
-    CheckResult test1() {
-        TestedProgram main = new TestedProgram(Main.class);
-        main.start();
-        String input = "3601";
-        String output = main.execute(input);
-        return solver(input, output);
-    }
+	// base test
+	CheckResult test1() {
+		TestedProgram main = new TestedProgram(Main.class);
+		main.start();
+		String input = "3601";
+		String output = main.execute(input);
+		return solver(input, output);
+	}
 
     // test with 4 bulls
     CheckResult test2() {
@@ -111,6 +105,7 @@ public class BullsCowsTest extends StageTest<String> {
         return pairMatcher.find();
     }
 
+
     // get number of bulls and cows from user program's output
     int[] getNumOfBullsAndCows(String userString) {
         Matcher nonePattern = Pattern.compile("\\b[nN]one\\b").matcher(userString);
@@ -147,14 +142,21 @@ public class BullsCowsTest extends StageTest<String> {
         List<Integer> guessNumbers = stringToArrayOfNumbers(guess);
 
         for (int i = 0; i < gradeNumbers.size(); i++) {
-            if (gradeNumbers.get(i).equals(guessNumbers.get(i))) {
-                bulls++;
-            }
+	        if (gradeNumbers.get(i).equals(guessNumbers.get(i))) {
+		        bulls++;
+	        }
         }
 
-        gradeNumbers.retainAll(guessNumbers);
-        int cows = gradeNumbers.size() - bulls;
+	    gradeNumbers.retainAll(guessNumbers);
+	    int cows = gradeNumbers.size() - bulls;
 
-        return new int[]{bulls, cows};
+	    return new int[]{bulls, cows};
     }
+
+
+	private static List<Integer> stringToArrayOfNumbers(String array) {
+		return Arrays.stream(array.split(""))
+				.map(Integer::parseInt)
+				.collect(Collectors.toList());
+	}
 }

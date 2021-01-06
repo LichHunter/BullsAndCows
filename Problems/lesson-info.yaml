@@ -1,2 +1,5 @@
 content:
   - Generating passwords
+  - Creating instances
+  - String to double conversion
+  - Catching some exceptions
